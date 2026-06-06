@@ -1,7 +1,7 @@
 const BASE = 'https://api.jamendo.com/v3.0'
 
 // 你的 Client ID — 已填入
-const CLIENT_ID = 'YOUR_CLIENT_ID'
+const CLIENT_ID = '17e83735'
 
 function getClientId(): string {
   if (typeof window !== 'undefined') {
