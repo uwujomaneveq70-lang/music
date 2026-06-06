@@ -1,22 +1,35 @@
-import { song_url_v1 } from 'NeteaseCloudMusicApi'
+const PROXIES = [
+  'https://netease-cloud-music-api-phi-azure.vercel.app',
+  'https://music-api-ten-mu.vercel.app',
+]
 
-export default async function handler(req: any, res: any) {
-  const { id } = req.query
+let proxyIdx = 0
 
-  if (!id) {
-    return res.status(400).json({ error: 'id required' })
-  }
-
+async function callNetease(path: string): Promise<any> {
+  const base = PROXIES[proxyIdx]
   try {
-    const result = await song_url_v1({ id: String(id), level: 'standard' })
-    const data = result.body.data?.[0]
-    
-    return res.json({
-      id: String(id),
-      url: data?.url || '',
-      freeTrialInfo: data?.freeTrialInfo || null,
-    })
-  } catch (e: any) {
-    return res.status(500).json({ error: e.message })
-  }
+    const resp = await fetch(`${base}${path}`)
+    if (resp.ok) return resp.json()
+  } catch {}
+  proxyIdx = (proxyIdx + 1) % PROXIES.length
+  try {
+    const resp = await fetch(`${PROXIES[proxyIdx]}${path}`)
+    if (resp.ok) return resp.json()
+  } catch {}
+  return null
 }
+
+export const config = { runtime: 'edge' }
+
+export async function GET(req: Request) {
+  const url = new URL(req.url)
+  const id = url.searchParams.get('id') || ''
+  if (!id) return Response.json({ error: 'id required' }, { status: 400 })
+
+  const data = await callNetease(`/song/url/v1?id=${id}&level=standard`)
+  if (!data) return Response.json({ url: '' })
+
+  return Response.json({ id, url: data.data?.[0]?.url || '' })
+}
+
+export { GET as POST }
