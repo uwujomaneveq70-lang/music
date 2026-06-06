@@ -2,7 +2,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Player from './Player'
 
 const NAV_ITEMS = [
-  { path: '/netease', label: '国内', icon: '🇨🇳' },
   { path: '/music', label: '欧美', icon: '🎵' },
   { path: '/radio', label: '电台', icon: '📻' },
   { path: '/favorites', label: '收藏', icon: '⭐' },

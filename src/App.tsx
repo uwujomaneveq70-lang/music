@@ -5,7 +5,6 @@ import Radio from './pages/Radio'
 import RadioGenre from './pages/RadioGenre'
 import Music from './pages/Music'
 import MusicGenre from './pages/MusicGenre'
-import Netease from './pages/Netease'
 import Search from './pages/Search'
 import Favorites from './pages/Favorites'
 import FullPlayer from './components/FullPlayer'
@@ -20,7 +19,6 @@ export default function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
-              <Route path="/netease" element={<Netease />} />
               <Route path="/music" element={<Music />} />
               <Route path="/music/:tag" element={<MusicGenre />} />
               <Route path="/radio" element={<Radio />} />
